@@ -14,9 +14,9 @@
        https://www.springframework.org/schema/beans/spring-beans.xsd">
 
 
-    <bean id="user" class="com.how2java.demo02.User" p:name="黄平" p:age="18" />
+    <bean id="user" class="com.how2java.demo02.User" p:name="龙神" p:age="18" />
 
-    <bean id="useraa2" class="com.how2java.demo02.User" c:name="钊儿" c:age="14" />
+    <bean id="useraa2" class="com.how2java.demo02.User" c:name="白手" c:age="14" />
 
 </beans>
 ```
@@ -56,15 +56,15 @@ Test
 1. singleton 单例模式(Spring默认机制)
 
 ```java
-<bean id="user" class="com.how2java.demo02.User" p:name="黄平" p:age="18" />
+<bean id="user" class="com.how2java.demo02.User" p:name="龙神" p:age="18" />
     
-<!--<bean id="user" class="com.how2java.demo02.User" p:name="黄平" p:age="18" scope="singleton" />-->
+<!--<bean id="user" class="com.how2java.demo02.User" p:name="白手" p:age="18" scope="singleton" />-->
 ```
 
 2. protorype 原型模式：每次从容器中get的时候，都会产生一个新对象(深拷贝)
 
 ```java
-<bean id="user" class="com.how2java.demo02.User" p:name="黄平" p:age="18" scope="prototype"/>
+<bean id="user" class="com.how2java.demo02.User" p:name="雄霸" p:age="18" scope="prototype"/>
 ```
 
 3. 其余的request、session、application等只能在web开发中使用到！
