@@ -1,18 +1,16 @@
-package com.how2java.demo01;
+package com.how2java.demo02;
 
-public abstract class Animal {
+public class User {
     private String name;
     private int age;
 
-    public Animal() {
+    public User() {
     }
 
-    public Animal(String name, int age) {
+    public User(String name, int age) {
         this.name = name;
         this.age = age;
     }
-
-    public abstract void eat();
 
     public String getName() {
         return name;
@@ -32,7 +30,7 @@ public abstract class Animal {
 
     @Override
     public String toString() {
-        return "Animal{" +
+        return "User{" +
                 "name='" + name + '\'' +
                 ", age=" + age +
                 '}';

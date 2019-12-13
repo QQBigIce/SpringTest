@@ -5,11 +5,13 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        https://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="cat" class="com.how2java.demo01.Cat">
+    <import resource="userBean.xml" />
+
+    <bean id="cat" class="com.how2java.demo03.Cat">
         <constructor-arg value="小猫咪" />
         <constructor-arg value="5" />
     </bean>
-    <bean id="dog" class="com.how2java.demo01.Dog"
+    <bean id="dog" class="com.how2java.demo03.Dog"
           p:name="小狗狗" p:age="8" />
 
 </beans>

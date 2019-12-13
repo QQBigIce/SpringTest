@@ -1,4 +1,4 @@
-package com.how2java.demo01;
+package com.how2java.demo03;
 
 public class Dog extends Animal {
     public void eat() {

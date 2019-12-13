@@ -1,4 +1,4 @@
-package com.how2java.demo01;
+package com.how2java.demo03;
 
 public class Cat extends Animal {
     public Cat() {
@@ -11,4 +11,5 @@ public class Cat extends Animal {
     public void eat() {
         System.out.println("猫吃鱼");
     }
+
 }

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="cat" class="com.how2java.demo03.Cat" p:name="小米米" p:age="2" />
+    <bean id="dog" class="com.how2java.demo03.Dog" p:name="旺财" p:age="3" />
+
+    <bean id="people" class="com.how2java.demo03.People" p:animal1-ref="dog" p:animal2-ref="cat" p:name="吴用" />
+    <!--byName会在容器上下文中查找和自己对象set方法后面的值对应的bean id-->
+    <!--byType会在容器上下文中查找和自己对象属性类型对应的bean-->
+    <bean id="person" class="com.how2java.demo03.Person" autowire="byType" p:name="宋江" />
+
+</beans>
