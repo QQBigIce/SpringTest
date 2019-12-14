@@ -1,24 +1,28 @@
 package com.how2java.demo03;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 public class People {
-    private Animal animal1;
-    private Animal animal2;
+    @Autowired
+    private Animal cat;
+    @Autowired
+    private Animal dog;
     private String name;
 
-    public Animal getAnimal1() {
-        return animal1;
+    public Animal getCat() {
+        return cat;
     }
 
-    public void setAnimal1(Animal animal1) {
-        this.animal1 = animal1;
+    public void setCat(Animal cat) {
+        this.cat = cat;
     }
 
-    public Animal getAnimal2() {
-        return animal2;
+    public Animal getDog() {
+        return dog;
     }
 
-    public void setAnimal2(Animal animal2) {
-        this.animal2 = animal2;
+    public void setDog(Animal dog) {
+        this.dog = dog;
     }
 
     public String getName() {
@@ -32,9 +36,10 @@ public class People {
     @Override
     public String toString() {
         return "People{" +
-                "animal1=" + animal1 +
-                ", animal2=" + animal2 +
-                ", name=" + name +
+                "cat=" + cat +
+                ", dog=" + dog +
+                ", name='" + name + '\'' +
                 '}';
     }
 }
+

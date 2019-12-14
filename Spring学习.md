@@ -102,3 +102,34 @@ Test
 
 - byName的时候，需要保证所有bean的id唯一，且这个bean需要和自动注入的属性的set方法的值一致！
 - byType的时候， 需要保证所有的bean的class唯一，且这个bean需要和自动注入的属性的类型一致！
+
+### 2.4、使用注解实现自动装配
+
+jdk1.5支持的注解，Spring2.5就支持注解了！
+
+
+
+要使用注解须知：
+
+1. 导入约束
+
+2. 配置注解的支持：<context:annotation-config />
+
+   ```java
+   <?xml version="1.0" encoding="UTF-8"?>
+   <beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           https://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context
+           https://www.springframework.org/schema/context/spring-context.xsd">
+   
+       <context:annotation-config/>
+   
+   </beans>
+   ```
+
+   
+
+@Autowired

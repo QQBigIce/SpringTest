@@ -31,13 +31,15 @@ public class MyTest {
     public void test3(){
         ApplicationContext context = new ClassPathXmlApplicationContext("demo03.xml");
         People people = context.getBean("people", People.class);
-        people.getAnimal1().eat();
-        people.getAnimal2().eat();
+        people.getDog().eat();
+        people.getCat().eat();
         System.out.println(people);
         Person person = context.getBean("person", Person.class);
         person.getCat().eat();
         person.getDog().eat();
         System.out.println(person);
+        People people1 = context.getBean("people1", People.class);
+        System.out.println(people1);
     }
 
 }
