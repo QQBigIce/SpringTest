@@ -113,7 +113,7 @@ jdk1.5支持的注解，Spring2.5就支持注解了！
 
 1. 导入约束
 
-2. 配置注解的支持：<context:annotation-config />
+2. **配置注解的支持：<context:annotation-config />**
 
    ```java
    <?xml version="1.0" encoding="UTF-8"?>
@@ -132,4 +132,237 @@ jdk1.5支持的注解，Spring2.5就支持注解了！
 
    
 
-@Autowired
+**@Autowired**
+
+直接在属性上使用即可！也可以在set方式上使用！
+
+使用@Autowired我们可以不用编写Set方法了，前提是你这个自动装配的属性在IOC(Spring) 容器中存在，且符合名称byName!
+
+科普：
+
+```xml
+@Nullable	字段标记了这个注解，说明这个字段可以为null;
+```
+
+```java
+public @interface Autowired {
+    boolean required() default true;
+}
+```
+
+```java
+    @Autowired(required = false)
+    private Animal cat;
+    @Autowired
+    private Animal dog;
+    private String name;
+```
+
+如果@Autowired自动装配的环境比较复杂，自动装配无法通过一个注解【@Autowired】完成的时候，我们可以使用@Qualifier(value = "xxx")去配置@Autowired的使用，指定一个唯一的bean对象注入！
+
+```java
+public class People {
+    @Autowired(required = false)
+    @Qualifier(value = "cat22")
+    private Animal cat;
+    @Autowired
+    @Qualifier(value = "dog22")
+    private Animal dog;
+    private String name;
+}
+```
+
+**@Resource注解**
+
+```java
+public class People {
+    @Resource(name = "cat22")
+    private Animal cat;
+    @Resource
+    private Animal dog;
+    private String name;
+}
+```
+
+
+
+小结：@Resource注解和@Autowired注解的区别：
+
+- 相同点：都是用来自动装配的，都可以放在属性字段上
+- 不同点：
+  - @Autowired 默认通过byType方式实现，失败再通过byName方式实现
+  - @Resource 默认通过byName方式实现，找不到再通过byType方式实现，2个都匹配不到，就报错！
+
+## 3、使用注解开发
+
+在Spring4之后，要使用注解开发，必须要保证aop的包导入了
+
+使用注解需要导入context约束，增加注解的支持！
+
+```java
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       https://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       https://www.springframework.org/schema/context/spring-context.xsd">
+
+</beans>
+```
+
+
+
+1. bean
+
+2. 属性如何注入
+
+   ```java
+   // 等价于 <bean id="user" class="com.kuang.dao.User" />
+   // @Component 组件
+   @Component
+   public class User {
+       // 相当于 <property name="name" value="吕布" />
+       @Value("吕布")
+       private String name;
+   
+       public String getName() {
+           return name;
+       }
+   }
+   ```
+
+3. 衍生的注解
+
+   @Component 有几个衍生注解，我们在web开发中，会按照MVC三层架构分层！
+
+   - dao	【@Repository】
+
+   - service 【@Service】
+
+   - controller 【@Controller】
+
+     这四个注解功能是一样的，都是代表将某个类注册到Spring容器中，装配Bean
+
+4. 自动装配配置
+
+   ```java
+   - @Autowired：自动装配通过类型，名字
+       如果Autowired不能唯一自动装配上属性，则需要通过@Qualifier(value = "xxx")
+   - @Nullable ：字段标记了这个注解，说明这个字段可以为null;
+   - @Resource ：自动装配通过名字，类型
+   ```
+
+5. 作用域
+
+   ```java
+   @Component
+   @Scope("prototype")		//设置作用域为原型
+   public class User {
+       // 相当于 <property name="name" value="吕布" />
+       @Value("吕布")
+       private String name;
+   
+       public String getName() {
+           return name;
+       }
+   }
+   
+   ```
+
+   
+
+6. 小结
+
+   xml 与 注解：
+
+   - xml 更加万能，适用于任何场合！维护简单方便
+   - 注解 不是自己的类使用不了，维护相对复杂！
+
+   xml 与 注解最佳实践：
+
+   - xml 用来管理bean;
+
+   - 注解只负责完成属性的注入；
+
+   - 我们在使用的过程中，只需要注意一个问题：必须要注解生效，就需要开启注解的支持
+
+     ```java
+     <!--    指定要扫描的包，这个包下的注解就会生效-->
+         <context:component-scan base-package="com.kuang" />
+     <!--    配置注解的驱动（如果有了上面的那条，就不用写此条）-->
+         <context:annotation-config />
+     ```
+
+## 4、使用Java的方式配置Spring
+
+我们现在要完全不使用Spring的xml的配置了，全权交给Java来做！
+
+JavaConfig 是Spring的一个字项目，在Spring4之后， 它成为了一个核心功能！
+
+
+
+实体类：
+
+```java
+// 这里这个注解和意思, 就是说明这个类被Spring接管了, 注册到了容器中
+@Component
+public class User {
+    @Value("奉先") //属性注入值
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "name='" + name + '\'' +
+                '}';
+    }
+}
+```
+
+配置文件：
+
+```java
+// 这个也会被Spring容器托管, 注册到容器中, 因为它本来就是一个@Component
+// @Configuration代表这是一个配置类, 就和之前看到的beans.xml是一样的
+@Configuration
+@ComponentScan("com.kuang.pojo")
+@Import(MyConfig2.class)
+public class MyConfig {
+
+    // 注册一个bean, 就相当于我们之前写的一个bean标签
+    // 这个方法的名字，相当于bean标签中的id属性
+    // 这个方法的返回值, 就相当于bean标签中的class属性
+    @Bean
+    public User getUser(){
+        return new User();
+    }
+
+}
+```
+
+
+
+测试类：
+
+```java
+public class MyTest {
+    public static void main(String[] args) {
+        // 如果完全使用了配置类的方式去做，我们就只能通过 AnnotationConfigApplicationContext 上下文来获取容器, 通过配置类的class对象加载
+        ApplicationContext context = new AnnotationConfigApplicationContext(MyConfig.class);
+        User user = context.getBean("getUser", User.class);
+        System.out.println(user.getName());
+    }
+}
+```
+
+这种纯Java的配置方式，在Springboot中随处可见！

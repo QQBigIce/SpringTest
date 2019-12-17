@@ -1,13 +1,21 @@
 package com.how2java.demo03;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+
+import javax.annotation.Resource;
 
 public class People {
-    @Autowired
-    private Animal cat;
-    @Autowired
-    private Animal dog;
-    private String name;
+        //    如果显示定义了Autowired的required属性为false，说明这个对象可以为null，否则不允许为Null
+//    @Autowired(required = false)
+//    @Qualifier(value = "cat22")
+        @Resource(name = "cat22")
+        private Animal cat;
+        //    @Autowired
+//    @Qualifier(value = "dog22")
+        @Resource(name = "dog22")
+        private Animal dog;
+        private String name;
 
     public Animal getCat() {
         return cat;
