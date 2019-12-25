@@ -61,7 +61,7 @@ Test
 <!--<bean id="user" class="com.how2java.demo02.User" p:name="白手" p:age="18" scope="singleton" />-->
 ```
 
-2. protorype 原型模式：每次从容器中get的时候，都会产生一个新对象(深拷贝)
+2. prototype 原型模式：每次从容器中get的时候，都会产生一个新对象(深拷贝)
 
 ```java
 <bean id="user" class="com.how2java.demo02.User" p:name="雄霸" p:age="18" scope="prototype"/>
@@ -366,3 +366,251 @@ public class MyTest {
 ```
 
 这种纯Java的配置方式，在Springboot中随处可见！
+
+
+
+## 5、代理模式
+
+为什么要学习代理模式？因为这就是SpringAOP的底层！	【SpringAOP 和 SpringMVC】
+
+代理模式的分类：
+
+- 静态代理
+- 动态代理
+
+### 5.1静态代理
+
+角色分析：
+
+- 抽象角色：一般会使用接口或者抽象类来解决
+- 真实角色：被代理的角色
+- 代理角色：代理真实角色，代理真实角色后，我们一般会做一些附属操作
+- 客户：访问代理对象的人
+
+
+
+代码步骤：
+
+1. 接口
+
+   ```java
+   // 租房
+   public interface Rent {
+   
+       public void rent();
+   
+   }
+   ```
+
+   
+
+2. 真实角色 
+
+   ```java
+   // 房东
+   public class Host implements Rent {
+       @Override
+       public void rent() {
+           System.out.println("房东要出租房子！");
+       }
+   } 
+   ```
+
+   
+
+3. 代理角色
+
+   ```java
+   public class Proxy implements Rent {
+       private Host host;
+   
+       public Proxy() {
+       }
+   
+       public Proxy(Host host) {
+           this.host = host;
+       }
+   
+       @Override
+       public void rent() {
+           seeHouse();
+           host.rent();
+           hetong();
+           fare();
+       }
+   
+       // 看房
+       public void seeHouse(){
+           System.out.println("中介带你看房！");
+       }
+   
+       // 签合同
+       public void hetong(){
+           System.out.println("签租赁合同！");
+       }
+   
+       // 收中介费
+       public void fare(){
+           System.out.println("收中介费！");
+       }
+   }
+   ```
+
+   
+
+4. 客户端访问代理角色
+
+   ```java
+   public class Client {
+       public static void main(String[] args) {
+           // 房东要出租房子
+           Host host = new Host();
+           // 代理，中介帮房东出租房子，但是代理角色一般会有一些附属操作
+           Rent rent = new Proxy(host);
+           // 你不用找房东，直接找中介即可
+           rent.rent();
+       }
+   }
+   ```
+
+   
+
+
+
+代理模式的好处：
+
+- 可以使真实角色的操作更加纯粹！不用去关注一些公共的业务！
+- 公共业务交给了代理角色，实现了业务的分工！
+- 公共业务发生扩展的时候，方便集中管理！
+
+缺点：
+
+- 一个真实角色就会产生一个代理角色，代码量会翻倍——开发效率变低！
+
+
+
+### 5.2、加深理解
+
+![image-20191218153608841](C:\Users\hp\AppData\Roaming\Typora\typora-user-images\image-20191218153608841.png)
+
+### 5.3、动态代理
+
+- 动态代理和静态代理角色一样
+- 动态代理的代理类是动态生成的，不是我们直接写好的！
+- 动态代理分为两大类：基于接口的动态代理，基于类的动态代理
+  - 基于接口：JDK动态代理
+  - 基于类：cglib
+  - java字节码：javasist
+
+需要了解2个类：Proxy(代理)，InvocationHandler(调用处理程序)
+
+
+
+动态代理的好处：
+
+- 可以使真实角色的操作更加纯粹！不用去关注一些公共的业务！
+- 公共业务交给了代理角色，实现了业务的分工！
+- 公共业务发生扩展的时候，方便集中管理！
+- 一个动态代理类代理的是一个接口，一般就是对应的一类业务
+- 一个动态代理类可以代理多个类，只要是实现了同一个接口即可
+
+## 6、AOP
+
+### 6.1、什么是AOP
+
+​	面向切面编程，通过预编译的方式和运行期动态代理实现程序功能的统一维护的一种技术
+
+### 6.2、AOP在Spring中的作用
+
+### 6.3、使用Spring实现AOP
+
+【重点】 使用AOP织入，需要导入一个依赖包！
+
+```java
+		<dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>1.9.4</version>
+        </dependency>
+```
+
+
+
+方式一：使用Spring的接口	【主要是SPring API接口实现】	
+
+```xml
+    <!-- 注册bean -->
+    <bean id="userService" class="com.kuang.service.UserServiceImpl" />
+
+    <bean id="log" class="com.kuang.log.Log" />
+    <bean id="afterLog" class="com.kuang.log.AfterLog" />
+
+    <!-- 方式一：使用原生Spring API接口 -->
+    <!-- 配置AOP: 需要导入AOP的约束 -->
+    <aop:config>
+        <!-- 切入点：expression：表达式   execution(要执行的位置)-->
+        <aop:pointcut id="pointcut" expression="execution(* com.kuang.service.UserServiceImpl.*(..))"/>
+
+        <!-- 执行环绕增加！ -->
+        <aop:advisor advice-ref="log" pointcut-ref="pointcut" />
+        <aop:advisor advice-ref="afterLog" pointcut-ref="pointcut" />
+    </aop:config>
+```
+
+
+
+方式二：自定义类实现AOP	【主要是切面定义】
+
+```xml
+<!--    方式二：自定义类-->
+    <bean id="diy" class="com.kuang.diy.DiyPointCut" />
+    <aop:config>
+<!--        自定义切面，ref 要引用的类作为切面 -->
+        <aop:aspect ref="diy">
+<!--            切入点-->
+            <aop:pointcut id="pointcut" expression="execution(* com.kuang.service.UserServiceImpl.*(..))"/>
+<!--            通知-->
+            <aop:before method="before" pointcut-ref="pointcut" />
+            <aop:after method="after" pointcut-ref="pointcut" />
+        </aop:aspect>
+    </aop:config>
+```
+
+
+
+方式三：使用注解实现！
+
+```java
+@Aspect //标注这个类是一个切面
+public class AnnotationPointCut {
+    @Before("execution(* com.kuang.service.UserServiceImpl.*(..))")
+    public void before(){
+        System.out.println("========方法执行前(注解)========");
+    }
+
+    @After("execution(* com.kuang.service.UserServiceImpl.*(..))")
+    public void after(){
+        System.out.println("========方法执行后(注解)========");
+    }
+    // 在环绕增强中，我们可以给定一个参数，代表我们要获取处理切入的点
+    @Around("execution(* com.kuang.service.UserServiceImpl.*(..))")
+    public void around(ProceedingJoinPoint joinPoint) throws Throwable {
+        System.out.println("环绕前");
+
+        Signature signature = joinPoint.getSignature();// 获得签名
+        System.out.println(signature);
+        // 执行方法
+        Object proceed = joinPoint.proceed();
+
+        System.out.println("环绕后");
+    }
+}
+```
+
+```xml
+    <!--方式三-->
+    <bean id="annotationPointCut" class="com.kuang.diy.AnnotationPointCut" />
+    <!--开启注解支持-->
+    <aop:aspectj-autoproxy />
+```
+

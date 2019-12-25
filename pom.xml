@@ -21,6 +21,8 @@
     <modules>
         <module>Spring-01-anno</module>
         <module>spring-02-appconfig</module>
+        <module>spring-03-proxy</module>
+        <module>spring-04-aop</module>
     </modules>
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.springframework/spring -->
